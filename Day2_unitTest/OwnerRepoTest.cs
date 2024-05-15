@@ -3,6 +3,7 @@ using CarFactoryAPI.Entities;
 using CarFactoryAPI.Repositories_DAL;
 using Microsoft.EntityFrameworkCore;
 using Moq;
+using Moq.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ using Xunit.Abstractions;
 
 namespace Day2_unitTest
 {
-    public class OwnerRepoTest 
+    public class OwnerRepoTest
     {
         Mock<FactoryContext> factoryContxetMock;
         OwnerRepository ownerRepository;
@@ -33,7 +34,21 @@ namespace Day2_unitTest
             bool result = ownerRepository.AddOwner(owner);
             //Assert
             Assert.True(result);
-            
+
+        }
+        [Fact]
+        [Trait("Author", "Mohammed Samy")]
+        [Trait("priority", "2")]
+        public void TestOwner_GetAllOwners_Sucess() {
+
+            List<Owner> owners = new() { 
+            new Owner { Id = 10,Name="Hamada"},
+            new Owner { Id = 20,Name="Hamoda"},
+            new Owner { Id = 30,Name="Hamo"},
+            };
+            factoryContxetMock.Setup(o => o.Owners).ReturnsDbSet(owners);
+            List<Owner> result = ownerRepository.GetAllOwners();
+            Assert.NotNull(result);
         }
 
     }
